@@ -10,6 +10,7 @@ Public Class PointComponent
 
 	Public Event Click()
 	Public Event PosChange()
+	Public Event EdicionPuntoTerminada(e As MouseEventArgs)
 
 	Dim WithEvents Contenedor As DrawData
 
@@ -17,7 +18,7 @@ Public Class PointComponent
 
 	Dim WithEvents Pane As PictureBox
 
-	Dim Moviendo As Boolean
+	Dim Moviendo As Boolean = False
 	Sub New(Conten As DrawData)
 		Contenedor = Conten
 		AddHandler Conten.Contenedor.Paint, AddressOf MyPanel_Paint
@@ -66,14 +67,21 @@ Public Class PointComponent
 	Private Sub Lab_MouseMove(sender As Object, e As MouseEventArgs) Handles Lab.MouseMove
 		If e.Button = MouseButtons.None Then
 			Lab.BackColor = Color.Red
-		End If
-		If Moviendo = True Then
-			With Lab
-				X = (e.X + .Left) / Contenedor.Escala
-				Y = (e.Y + .Top) / Contenedor.Escala
-				.Top = e.Y + .Top  '+ .Height / 2
-				.Left = e.X + .Left   '+ .Width / 2
-			End With
+
+			If Moviendo = True Then
+				With Lab
+					X = (e.X + .Left) / Contenedor.Escala
+					Y = (e.Y + .Top) / Contenedor.Escala
+					.Top = e.Y + .Top  '+ .Height / 2
+					.Left = e.X + .Left   '+ .Width / 2
+				End With
+				Pane.Refresh()
+			End If
+		ElseIf e.Button = MouseButtons.Middle Then
+			If Moviendo = True Then
+				Contenedor.MoverArrastrarAccion(New PointF(e.X, e.Y))
+			End If
+
 		End If
 	End Sub
 
@@ -87,30 +95,94 @@ Public Class PointComponent
 		'If e.Button = MouseButtons.Left Then
 		'	Moviendo = True
 		'End If
+		If (e.Button = MouseButtons.Middle) And (Moviendo = True) Then
+			Contenedor.MoveArrastrar(New PointF(e.X, e.Y))
+		End If
 	End Sub
 
 	Private Sub Lab_MouseUp(sender As Object, e As MouseEventArgs) Handles Lab.MouseUp
 		'If e.Button = MouseButtons.Left Then
 		'	Moviendo = False
 		'End If
-	End Sub
-
-	Private Sub Pane_MouseMove(sender As Object, e As MouseEventArgs) Handles Pane.MouseMove
 		If Moviendo = True Then
-			X = e.X / Contenedor.Escala
-			Y = e.Y / Contenedor.Escala
-			With Lab
-				.Top = e.Y '+ .Height / 2
-				.Left = e.X '+ .Width / 2
-			End With
+			If e.Button = MouseButtons.Middle Then
+				Lab.Cursor = Cursors.Cross
+			Else
+				If omitirUpEnClick = True Then
+					omitirUpEnClick = False
+				Else
+					Moviendo = False
+					RaiseEvent EdicionPuntoTerminada(e)
+				End If
+
+			End If
 		End If
 	End Sub
 
-	Private Sub Pane_MouseUp(sender As Object, e As MouseEventArgs) Handles Pane.MouseUp
-		Moviendo = False
+	Private Sub Pane_MouseMove(sender As Object, e As MouseEventArgs) Handles Pane.MouseMove
+
+		If e.Button = MouseButtons.Middle Then
+			If Moviendo = True Then
+				Contenedor.MoverArrastrarAccion(New PointF(e.X, e.Y))
+			End If
+		Else
+			If Moviendo = True Then
+				X = e.X / Contenedor.Escala
+				Y = e.Y / Contenedor.Escala
+				With Lab
+					.Top = e.Y '+ .Height / 2
+					.Left = e.X '+ .Width / 2
+				End With
+				Pane.Refresh()
+			End If
+		End If
+
 	End Sub
 
+	Private Sub Pane_MouseUp(sender As Object, e As MouseEventArgs) Handles Pane.MouseUp
+		If e.Button = MouseButtons.Middle Then
+
+		Else
+			If Moviendo = True Then
+
+				Moviendo = False
+				RaiseEvent EdicionPuntoTerminada(e)
+			End If
+		End If
+    End Sub
+
+	Dim omitirUpEnClick As Boolean
 	Private Sub Lab_Click(sender As Object, e As EventArgs) Handles Lab.Click
+
 		Moviendo = Not Moviendo
+
+		If Moviendo = True Then
+			omitirUpEnClick = True
+			IniciadoMOvimiento()
+		Else
+			Contenedor.CambiarVisibilidadNodos(True)
+			'Lab.Cursor = Cursors.Cross
+			RaiseEvent EdicionPuntoTerminada(e)
+		End If
 	End Sub
+
+	Public Sub IniciadoMOvimiento()
+		Moviendo = True
+		Contenedor.CambiarVisibilidadNodos(False)
+		Lab.Cursor = Cursors.Cross
+	End Sub
+
+	Public Sub DetenerMovimiento()
+		Moviendo = False
+		Contenedor.CambiarVisibilidadNodos(True)
+	End Sub
+
+	Private Sub Contenedor_VisibilidadNodos(Visible As Boolean) Handles Contenedor.VisibilidadNodos
+		If Moviendo = False Then
+			Lab.Visible = Visible
+		Else
+			Lab.Visible = True
+		End If
+	End Sub
+
 End Class

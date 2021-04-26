@@ -144,9 +144,11 @@ Partial Class Form1
 		'Panel1
 		'
 		Me.Panel1.AutoScroll = True
+		Me.Panel1.AutoSize = True
 		Me.Panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
 		Me.Panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
 		Me.Panel1.Controls.Add(Me.PictureBox1)
+		Me.Panel1.Cursor = System.Windows.Forms.Cursors.Default
 		Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
 		Me.Panel1.Location = New System.Drawing.Point(0, 0)
 		Me.Panel1.Name = "Panel1"
@@ -155,6 +157,7 @@ Partial Class Form1
 		'
 		'PictureBox1
 		'
+		Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Cross
 		Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
 		Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
 		Me.PictureBox1.Margin = New System.Windows.Forms.Padding(0)
@@ -181,6 +184,7 @@ Partial Class Form1
 		Me.ToolStrip1.PerformLayout()
 		Me.SplitContainer1.Panel1.ResumeLayout(False)
 		Me.SplitContainer1.Panel2.ResumeLayout(False)
+		Me.SplitContainer1.Panel2.PerformLayout()
 		CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.SplitContainer1.ResumeLayout(False)
 		Me.TabControl1.ResumeLayout(False)

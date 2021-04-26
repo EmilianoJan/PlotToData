@@ -10,6 +10,9 @@ Public Class Plot2DComponent
 
 	Public Property Title As String
 
+
+	Public Property Series As New List(Of SerieComponet)
+
 	Dim WithEvents conten As DrawData
 
 	''' <summary>
@@ -21,7 +24,12 @@ Public Class Plot2DComponent
 		conten = Contenedor
 		X_axis = New ComponentAxis(Contenedor)
 		Y_axis = New ComponentAxis(Contenedor)
+	End Sub
 
+	Public Sub AgregarSerie_ConPuntos()
+		Dim seri As New SerieComponet(conten)
+		Series.Add(seri)
+		seri.IniciarAgregadoPuntos()
 	End Sub
 
 End Class

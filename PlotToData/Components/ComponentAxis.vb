@@ -40,10 +40,10 @@ Public Class ComponentAxis
 		'e.Graphics.DrawLine(Pens.Black, 20, 65, 20, 65)
 
 		Dim x1, x2, y1, y2 As Single
-		x1 = Start_Point.X
-		y1 = Start_Point.Y
-		x2 = End_Pont.X
-		y2 = End_Pont.Y
+		x1 = Start_Point.X * Conten.Escala
+		y1 = Start_Point.Y * Conten.Escala
+		x2 = End_Pont.X * Conten.Escala
+		y2 = End_Pont.Y * Conten.Escala
 
 		e.Graphics.DrawLine(Pens.Black, x1, y1, x2, y2)
 	End Sub

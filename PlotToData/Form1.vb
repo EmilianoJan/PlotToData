@@ -9,7 +9,7 @@
     Dim PuntoAMover As Point
 
     Dim PlotC As Plot2DComponent
-    Dim DrawCo As New DrawData
+    Dim WithEvents DrawCo As New DrawData
     Dim original As Bitmap
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs)
 
@@ -57,6 +57,9 @@
 
     End Sub
 
+
+    Dim prevalor As Single = 0
+
     Private Sub ActualizarZoomPicture(e As MouseEventArgs)
         'if very sensitive mouse, change 0.00005 to something even smaller   
         _scaleDelta = Math.Sqrt(PictureBox1.Width * PictureBox1.Height) * 0.00005
@@ -89,10 +92,37 @@
             DrawCo.Escala = _scale
 
             DrawCo.Actualizar()
+
+            'Actualizo la posición del panel
+            'Panel1.HorizontalScroll.Value = prevalor * (1 + _scaleDelta)
+            'Panel1.VerticalScroll.Value = Panel1.VerticalScroll.Value * (1 + _scaleDelta)
+
+            Dim valor As Integer
+            valor = Panel1.HorizontalScroll.Value * (1 + _scaleDelta)
+
+            If valor < Panel1.HorizontalScroll.Minimum Then
+                valor = Panel1.HorizontalScroll.Minimum
+            End If
+            If valor > Panel1.HorizontalScroll.Maximum Then
+                valor = Panel1.HorizontalScroll.Maximum
+            End If
+            Panel1.HorizontalScroll.Value = valor
+
+            valor = prevalor * (1 + _scaleDelta)
+            If valor < Panel1.VerticalScroll.Minimum Then
+                valor = Panel1.VerticalScroll.Minimum
+            End If
+            If valor > Panel1.VerticalScroll.Maximum Then
+                valor = Panel1.VerticalScroll.Maximum
+            End If
+            Panel1.VerticalScroll.Value = valor
+
+
         End If
 
 
     End Sub
+
 
 
     Private Sub ActualizarZoom(e As MouseEventArgs)
@@ -175,27 +205,45 @@
 
     Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseMove
         If e.Button = Windows.Forms.MouseButtons.Middle Then
-            Dim X As Integer = (pntStart.X - e.X)
-            Dim Y As Integer = (pntStart.Y - e.Y)
-            PuntoAMover = New Point((X - Panel1.AutoScrollPosition.X), (Y - Panel1.AutoScrollPosition.Y))
-
-            Panel1.AutoScrollPosition = PuntoAMover
+            Arrastrar(New PointF(e.X, e.Y))
         End If
+    End Sub
+
+    Private Sub Arrastrar(Pos As PointF)
+        Dim X As Integer = (pntStart.X - Pos.X)
+        Dim Y As Integer = (pntStart.Y - Pos.Y)
+        PuntoAMover = New Point((X - Panel1.AutoScrollPosition.X), (Y - Panel1.AutoScrollPosition.Y))
+
+        Panel1.AutoScrollPosition = PuntoAMover
+        prevalor = Panel1.VerticalScroll.Value
     End Sub
 
     Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles PictureBox1.MouseUp
 
         If e.Button = Windows.Forms.MouseButtons.Middle Then
-            PictureBox1.Cursor = Cursors.Default
+            PictureBox1.Cursor = Cursors.Cross
         End If
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
+        PlotC.AgregarSerie_ConPuntos()
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Panel1.Refresh()
 
+    End Sub
+
+    Private Sub PictureBox1_Click_1(sender As Object, e As EventArgs) Handles PictureBox1.Click
+
+    End Sub
+
+    Private Sub DrawCo_MoverArrastrar(pos As PointF) Handles DrawCo.MoverArrastrar_Inicio
+        pntStart = New Point(pos.X, pos.Y)
+        PictureBox1.Cursor = Cursors.SizeAll
+    End Sub
+
+    Private Sub DrawCo_MoverArrastrar_Desplazamiento(pos As PointF) Handles DrawCo.MoverArrastrar_Desplazamiento
+        Arrastrar(pos)
     End Sub
 End Class
