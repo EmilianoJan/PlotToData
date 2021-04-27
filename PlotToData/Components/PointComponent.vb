@@ -11,6 +11,7 @@ Public Class PointComponent
 	Public Event Click()
 	Public Event PosChange()
 	Public Event EdicionPuntoTerminada(e As MouseEventArgs)
+	Public Event EdicionPuntoTerminada_Completo(e As MouseEventArgs, Sender As PointComponent)
 
 	Dim WithEvents Contenedor As DrawData
 
@@ -19,6 +20,9 @@ Public Class PointComponent
 	Dim WithEvents Pane As PictureBox
 
 	Dim Moviendo As Boolean = False
+
+	Public SerieIndex As Integer
+
 	Sub New(Conten As DrawData)
 		Contenedor = Conten
 		AddHandler Conten.Contenedor.Paint, AddressOf MyPanel_Paint
@@ -113,6 +117,7 @@ Public Class PointComponent
 				Else
 					Moviendo = False
 					RaiseEvent EdicionPuntoTerminada(e)
+					RaiseEvent EdicionPuntoTerminada_Completo(e, Me)
 				End If
 
 			End If
@@ -147,6 +152,7 @@ Public Class PointComponent
 
 				Moviendo = False
 				RaiseEvent EdicionPuntoTerminada(e)
+				RaiseEvent EdicionPuntoTerminada_Completo(e, Me)
 			End If
 		End If
     End Sub
@@ -163,6 +169,7 @@ Public Class PointComponent
 			Contenedor.CambiarVisibilidadNodos(True)
 			'Lab.Cursor = Cursors.Cross
 			RaiseEvent EdicionPuntoTerminada(e)
+			RaiseEvent EdicionPuntoTerminada_Completo(e, Me)
 		End If
 	End Sub
 
@@ -172,10 +179,7 @@ Public Class PointComponent
 		Lab.Cursor = Cursors.Cross
 	End Sub
 
-	Public Sub DetenerMovimiento()
-		Moviendo = False
-		Contenedor.CambiarVisibilidadNodos(True)
-	End Sub
+
 
 	Private Sub Contenedor_VisibilidadNodos(Visible As Boolean) Handles Contenedor.VisibilidadNodos
 		If Moviendo = False Then
@@ -185,4 +189,18 @@ Public Class PointComponent
 		End If
 	End Sub
 
+	Public Sub DetenerMovimiento()
+		Moviendo = False
+		Contenedor.CambiarVisibilidadNodos(True)
+	End Sub
+	''' <summary>
+	''' Rutina que elimina el punto
+	''' </summary>
+	Public Sub DeletePoint()
+		RemoveHandler Contenedor.Contenedor.Paint, AddressOf MyPanel_Paint
+		Pane = Nothing
+		Lab.Dispose()
+		Lab = Nothing
+		Contenedor = Nothing
+	End Sub
 End Class

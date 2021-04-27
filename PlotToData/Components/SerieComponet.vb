@@ -12,6 +12,8 @@ Public Class SerieComponet
 	Dim WithEvents Conten As DrawData
 
 	Dim WithEvents UltimoPunto As PointComponent
+	Dim UltimoPuntoIndi As Integer = 0
+	Dim AgregarAlFinal As Boolean = True
 	Sub New(Component As DrawData)
 		Conten = Component
 		AddHandler Conten.Contenedor.Paint, AddressOf MyPanel_Paint
@@ -26,19 +28,41 @@ Public Class SerieComponet
 	End Sub
 
 	Private Sub agregarPunto()
-		If IsNothing(UltimoPunto) = False Then
-			UltimoPunto.DetenerMovimiento()
-		End If
+		'If IsNothing(UltimoPunto) = False Then
+		'	UltimoPunto.DetenerMovimiento()
+		'End If
 		Dim punto As New PointComponent(Conten)
 		'AddHandler punto.EdicionPuntoTerminada, AddressOf EventosPuntos
 		punto.IniciadoMOvimiento()
-		Points.Add(punto)
+		If AgregarAlFinal = True Then
+			Points.Add(punto)
+			UltimoPuntoIndi = Points.Count - 1
+		Else
+			Points.Insert(0, punto)
+			UltimoPuntoIndi = 0
+			ActualizarIndicesPuntos()
+		End If
+
+		punto.SerieIndex = UltimoPuntoIndi
 		UltimoPunto = punto
+		AddHandler punto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
+	End Sub
+
+	Private Sub ActualizarIndicesPuntos()
+		Dim indi As Integer = 0
+		For Each punto In Points
+			punto.SerieIndex = indi
+			indi = indi + 1
+		Next
 	End Sub
 
 	Private Sub DetenerAgregado()
 		If IsNothing(UltimoPunto) = False Then
+			RemoveHandler UltimoPunto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
 			UltimoPunto.DetenerMovimiento()
+			Points.RemoveAt(UltimoPuntoIndi)
+			UltimoPunto.DeletePoint()
+			UltimoPuntoIndi = 0
 			UltimoPunto = Nothing
 		End If
 	End Sub
@@ -70,4 +94,22 @@ Public Class SerieComponet
 			DetenerAgregado()
 		End If
 	End Sub
+
+	Private Sub TodosLosPuntos(e As MouseEventArgs, Punto As PointComponent)
+		If IsNothing(UltimoPunto) = True Then
+			'significa que podríamos agregar elementos.
+			If Punto.SerieIndex = Points.Count - 1 Then ' verificamos que sea el último
+				AgregarAlFinal = True
+				agregarPunto()
+			End If
+			If Punto.SerieIndex = 0 Then
+				AgregarAlFinal = False
+				agregarPunto()
+			End If
+		End If
+	End Sub
+
+
+
+
 End Class
