@@ -46,6 +46,7 @@ Public Class SerieComponet
 		punto.SerieIndex = UltimoPuntoIndi
 		UltimoPunto = punto
 		AddHandler punto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
+		AddHandler punto.KeyPress, AddressOf PuntoKeyPress
 	End Sub
 
 	Private Sub ActualizarIndicesPuntos()
@@ -59,6 +60,7 @@ Public Class SerieComponet
 	Private Sub DetenerAgregado()
 		If IsNothing(UltimoPunto) = False Then
 			RemoveHandler UltimoPunto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
+			RemoveHandler UltimoPunto.KeyPress, AddressOf PuntoKeyPress
 			UltimoPunto.DetenerMovimiento()
 			Points.RemoveAt(UltimoPuntoIndi)
 			UltimoPunto.DeletePoint()
@@ -110,6 +112,14 @@ Public Class SerieComponet
 	End Sub
 
 
-
+	Private Sub PuntoKeyPress(e As KeyEventArgs, Sender As PointComponent)
+		Select Case e.KeyCode
+			Case Keys.Delete
+				UltimoPunto = Sender
+				UltimoPuntoIndi = Sender.SerieIndex
+				DetenerAgregado()
+				ActualizarIndicesPuntos()
+		End Select
+	End Sub
 
 End Class

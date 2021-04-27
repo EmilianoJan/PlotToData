@@ -17,6 +17,8 @@ Public Class DrawData
 
 	Public Event MoverArrastrar_Desplazamiento(pos As PointF)
 
+	Public Event KeyPressEvent(e As KeyEventArgs)
+
 	Public Sub Actualizar()
 		RaiseEvent CambioEscala()
 	End Sub
@@ -31,6 +33,10 @@ Public Class DrawData
 
 	Public Sub MoverArrastrarAccion(Pos As PointF)
 		RaiseEvent MoverArrastrar_Desplazamiento(Pos)
+	End Sub
+
+	Public Sub KeyPressEve(e As KeyEventArgs)
+		RaiseEvent KeyPressEvent(e)
 	End Sub
 
 End Class

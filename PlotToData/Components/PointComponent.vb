@@ -12,6 +12,7 @@ Public Class PointComponent
 	Public Event PosChange()
 	Public Event EdicionPuntoTerminada(e As MouseEventArgs)
 	Public Event EdicionPuntoTerminada_Completo(e As MouseEventArgs, Sender As PointComponent)
+	Public Event KeyPress(e As KeyEventArgs, Sender As PointComponent)
 
 	Dim WithEvents Contenedor As DrawData
 
@@ -177,6 +178,7 @@ Public Class PointComponent
 		Moviendo = True
 		Contenedor.CambiarVisibilidadNodos(False)
 		Lab.Cursor = Cursors.Cross
+
 	End Sub
 
 
@@ -202,5 +204,22 @@ Public Class PointComponent
 		Lab.Dispose()
 		Lab = Nothing
 		Contenedor = Nothing
+	End Sub
+
+
+	Private Sub ResolverKeyDown(e As KeyEventArgs)
+		If Moviendo = True Then
+			Select Case e.KeyCode
+				Case Keys.Escape
+					DetenerMovimiento() ' detengo el movimiento
+				Case Else
+					RaiseEvent KeyPress(e, Me)
+					'hay que eliminar el punto de la serie. 
+			End Select
+		End If
+	End Sub
+
+	Private Sub Contenedor_KeyPressEvent(e As KeyEventArgs) Handles Contenedor.KeyPressEvent
+		ResolverKeyDown(e)
 	End Sub
 End Class

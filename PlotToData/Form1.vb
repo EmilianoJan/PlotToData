@@ -246,4 +246,8 @@
     Private Sub DrawCo_MoverArrastrar_Desplazamiento(pos As PointF) Handles DrawCo.MoverArrastrar_Desplazamiento
         Arrastrar(pos)
     End Sub
+
+    Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        DrawCo.KeyPressEve(e)
+    End Sub
 End Class

@@ -178,6 +178,7 @@ Partial Class Form1
 		Me.ClientSize = New System.Drawing.Size(800, 450)
 		Me.Controls.Add(Me.SplitContainer1)
 		Me.Controls.Add(Me.ToolStrip1)
+		Me.KeyPreview = True
 		Me.Name = "Form1"
 		Me.Text = "Form1"
 		Me.ToolStrip1.ResumeLayout(False)
