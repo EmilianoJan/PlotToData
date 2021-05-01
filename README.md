@@ -1,10 +1,10 @@
 # PlotToData
+Program that allows to extract the points of figures that are in image format. Practical tool to extract datasets from papers.
 
 ![imagen](https://user-images.githubusercontent.com/19601324/116791914-da0afe00-aa93-11eb-8ca9-e7ae9465272e.png)
 
 [Download PlotToData.exe](https://github.com/EmilianoJan/PlotToData/releases/)
 
-Program that allows to extract the points of figures that are in image format. Practical tool to extract datasets from papers.
 
 ## Features:
 1. Zoom and edit on the image
