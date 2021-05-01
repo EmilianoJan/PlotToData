@@ -2,23 +2,36 @@
 ''' <summary>
 ''' Representa una serie de datos
 ''' </summary>
+<System.ComponentModel.Category("Series")>
+<System.ComponentModel.Description("Serie de datos. Administra y configura las propiedades de todos los puntos.")>
+<System.ComponentModel.TypeConverter(GetType(System.ComponentModel.ExpandableObjectConverter))>
 <Serializable> Public Class SerieComponet
 	Implements NameInterface
+	Implements IDisposable
 
+	<System.ComponentModel.Category("Series")>
+	<System.ComponentModel.Description("Contiene el nombre de la serie de datos. Es empleada para generar los graficos, leyendas.")>
 	Public Property Serie_Name As String Implements NameInterface.Name
 
+	<System.ComponentModel.Category("Series")>
+	<System.ComponentModel.Description("Documentación del componente")>
+	<System.ComponentModel.TypeConverter(GetType(System.ComponentModel.ExpandableObjectConverter))>
 	Public Property Points As New List(Of PointComponent)
 
+	Public Serie_Index As Integer
 
 	Dim WithEvents Conten As DrawData
 
 	Dim WithEvents UltimoPunto As PointComponent
 	Dim UltimoPuntoIndi As Integer = 0
 	Dim AgregarAlFinal As Boolean = True
+	Private disposedValue As Boolean
 
 	Public Event Click(sender As SerieComponet)
-	Sub New(Component As DrawData)
+	Public Event Deleting_Series(sender As SerieComponet)
+	Sub New(Component As DrawData, SerieIndex As Integer)
 		Conten = Component
+		Serie_Index = SerieIndex
 		AddHandler Conten.Contenedor.Paint, AddressOf MyPanel_Paint
 	End Sub
 
@@ -132,4 +145,36 @@
 		RaiseEvent Click(Me)
 	End Sub
 
+	Protected Overridable Sub Dispose(disposing As Boolean)
+		If Not disposedValue Then
+			If disposing Then
+				RaiseEvent Deleting_Series(Me)
+				' TODO: dispose managed state (managed objects)
+				For Each punto In Points
+					RemoveHandler punto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
+					RemoveHandler punto.KeyPress, AddressOf PuntoKeyPress
+					RemoveHandler punto.Click, AddressOf ClickInNodo
+					punto.DeletePoint()
+				Next
+				Points.Clear()
+			End If
+
+			' TODO: free unmanaged resources (unmanaged objects) and override finalizer
+			' TODO: set large fields to null
+			disposedValue = True
+		End If
+	End Sub
+
+	' ' TODO: override finalizer only if 'Dispose(disposing As Boolean)' has code to free unmanaged resources
+	' Protected Overrides Sub Finalize()
+	'     ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+	'     Dispose(disposing:=False)
+	'     MyBase.Finalize()
+	' End Sub
+
+	Public Sub Dispose() Implements IDisposable.Dispose
+		' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
+		Dispose(disposing:=True)
+		GC.SuppressFinalize(Me)
+	End Sub
 End Class

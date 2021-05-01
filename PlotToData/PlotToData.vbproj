@@ -73,6 +73,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonGUI\GUIListaPropiedades.designer.vb">
+      <DependentUpon>GUIListaPropiedades.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CommonGUI\GUIListaPropiedades.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Components\ComponentAxis.vb" />
     <Compile Include="Components\DrawData.vb" />
     <Compile Include="Components\NameInterface.vb" />
@@ -104,6 +110,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CommonGUI\GUIListaPropiedades.resx">
+      <DependentUpon>GUIListaPropiedades.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.vb</DependentUpon>
     </EmbeddedResource>

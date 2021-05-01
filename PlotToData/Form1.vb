@@ -11,6 +11,8 @@
     Dim WithEvents PlotC As Plot2DComponent
     Dim WithEvents DrawCo As New DrawData
     Dim original As Bitmap
+
+    Dim ObjectList As New List(Of NameInterface)
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs)
 
     End Sub
@@ -21,7 +23,7 @@
         DrawCo.Escala = _scale
         PlotC = New Plot2DComponent(DrawCo)
         ' original = New Bitmap(Panel1.BackgroundImage)
-
+        ActualizarListado()
     End Sub
 
     Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
@@ -62,7 +64,7 @@
 
     Private Sub ActualizarZoomPicture(e As MouseEventArgs)
         'if very sensitive mouse, change 0.00005 to something even smaller   
-        _scaleDelta = Math.Sqrt(PictureBox1.Width * PictureBox1.Height) * 0.00005
+        _scaleDelta = Math.Sqrt(PictureBox1.Width * PictureBox1.Height) * 0.0002
 
         If e.Delta < 0 Then
             _scale -= _scaleDelta
@@ -124,39 +126,21 @@
     End Sub
 
 
-
-    Private Sub ActualizarZoom(e As MouseEventArgs)
-        'if very sensitive mouse, change 0.00005 to something even smaller   
-        _scaleDelta = Math.Sqrt(Panel1.BackgroundImage.Width * Panel1.BackgroundImage.Height) * 0.00005
-
-        If e.Delta < 0 Then
-            _scale -= _scaleDelta
-        ElseIf e.Delta > 0 Then
-            _scale += _scaleDelta
-        End If
-
-        If e.Delta <> 0 Then
-
-            DrawCo.Escala = _scale
-
-            'PictureBox1.Size = New Size(CInt(Math.Round((_originalSize.Width * _ratWidth) * _scale)),
-            '                                    CInt(Math.Round((_originalSize.Height * _ratHeight) * _scale)))
-            'PictureBox2.Size = New Size(CInt(Math.Round((_originalSize.Width * _ratWidth) * _scale)),
-            '                        CInt(Math.Round((_originalSize.Height * _ratHeight) * _scale)))
-
-            ' Panel1.BackgroundImage.Size = New Size(CInt(Math.Round((_originalSize.Width) * _scale)),
-            'CInt(Math.Round((_originalSize.Height) * _scale)))
-
-            Panel1.BackgroundImage = New Bitmap(original, New Size(CInt(Math.Round((_originalSize.Width) * _scale)),
-                                                CInt(Math.Round((_originalSize.Height) * _scale))))
-            'PictureBox2.Size = New Size(CInt(Math.Round((_originalSize.Width) * _scale)),
-            '                        CInt(Math.Round((_originalSize.Height) * _scale)))
-            DrawCo.Actualizar()
-        End If
-
-
+    Private Sub ActualizarListado()
+        With ObjectList
+            .Clear()
+            .Add(PlotC)
+            .Add(PlotC.X_axis)
+            .Add(PlotC.Y_axis)
+            For Each seri In PlotC.Series
+                .Add(seri)
+            Next
+        End With
+        ComboBox1.Items.Clear()
+        For Each nombre In ObjectList
+            ComboBox1.Items.Add(nombre.Name)
+        Next
     End Sub
-
 
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
@@ -253,6 +237,7 @@
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
         PlotC.AgregarSerie_ConPuntos()
+        ActualizarListado()
     End Sub
 
     Private Sub PlotC_Click_on_Serie(sender As SerieComponet) Handles PlotC.Click_on_Serie
@@ -276,5 +261,23 @@
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
         TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Matlab)
+    End Sub
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        SeleccionarObjeto(ComboBox1.SelectedIndex)
+    End Sub
+
+    Private Sub SeleccionarObjeto(Indice As Integer)
+        PropertyGrid1.SelectedObject = ObjectList(Indice)
+        ActualizarListado()
+    End Sub
+
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        Dim seriesEditor As New Extras.GUIListadoSeleccionableDescripcion(PlotC.Series)
+        seriesEditor.ActualizarListado()
+        seriesEditor.InterfazGrafica.ShowDialog()
+        ActualizarListado()
+
+
     End Sub
 End Class

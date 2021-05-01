@@ -8,7 +8,7 @@
 
 	Public Property Y_axis As ComponentAxis
 
-	Public Property Title As String Implements NameInterface.Name
+	Public Property Title As String = "Plot" Implements NameInterface.Name
 
 	Public Property Series As New List(Of SerieComponet)
 
@@ -19,6 +19,8 @@
 	Public Event Click_on_Serie(sender As SerieComponet)
 
 	Public Event Click_on_axis(sender As ComponentAxis)
+
+	Dim AutoIncrementalSerialIndex As Integer = 0
 
 	Public Enum TypesCode
 		Matlab
@@ -41,7 +43,8 @@
 	End Sub
 
 	Public Sub AgregarSerie_ConPuntos()
-		Dim seri As New SerieComponet(conten)
+		Dim seri As New SerieComponet(conten, AutoIncrementalSerialIndex)
+		AutoIncrementalSerialIndex = AutoIncrementalSerialIndex + 1
 		Series.Add(seri)
 		seri.IniciarAgregadoPuntos()
 		AddHandler seri.Click, AddressOf Click_on_SerieFun
@@ -110,10 +113,11 @@
 
 
 	Private Function MatlabCode() As String
-		Dim sal As String = "% Loading series"
+		Dim sal As String = "% Loading series" & vbCrLf
 
 		For Each serie In Corected_Series
-			sal = sal & serie.NombreY & " = [ "
+			Dim sname As String = MatlabSeriesName(serie.NombreY)
+			sal = sal & sname & " = [ "
 			For Each ele In serie.Datos
 				sal = sal & ele.X.ToString & " " & ele.Y.ToString & "; "
 			Next
@@ -124,17 +128,20 @@
 		sal = sal & "figure % Generate plot" & vbCrLf
 		Dim primera As Boolean = True
 		For Each serie In Corected_Series
+
+			Dim sname As String = MatlabSeriesName(serie.NombreY)
+
 			If X_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
 				If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
-					sal = sal & "plot( " & serie.NombreY & "(:, 1), " & serie.NombreY & "(:, 2))" & vbCrLf
+					sal = sal & "plot( " & sname & "(:, 1), " & sname & "(:, 2))" & vbCrLf
 				Else
-					sal = sal & "semilogy( " & serie.NombreY & "(:, 1), " & serie.NombreY & "(:, 2))" & vbCrLf
+					sal = sal & "semilogy( " & sname & "(:, 1), " & sname & "(:, 2))" & vbCrLf
 				End If
 			Else
 				If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
-					sal = sal & "semilogx( " & serie.NombreY & "(:, 1), " & serie.NombreY & "(:, 2))" & vbCrLf
+					sal = sal & "semilogx( " & sname & "(:, 1), " & sname & "(:, 2))" & vbCrLf
 				Else
-					sal = sal & "loglog( " & serie.NombreY & "(:, 1), " & serie.NombreY & "(:, 2))" & vbCrLf
+					sal = sal & "loglog( " & sname & "(:, 1), " & sname & "(:, 2))" & vbCrLf
 				End If
 			End If
 			If primera = True Then
@@ -154,6 +161,14 @@
 		Next
 		sal = Strings.Mid(sal, 1, sal.Length - 1)
 		sal = sal & ") " & vbCrLf
+
+		Return sal
+	End Function
+
+	Private Function MatlabSeriesName(Name As String) As String
+		Dim sal As String
+		sal = Strings.Replace(Name, " ", "_")
+
 
 		Return sal
 	End Function
