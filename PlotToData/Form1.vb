@@ -1,4 +1,7 @@
-﻿Public Class Form1
+﻿Imports PlotToData.Plot
+
+
+Public Class Form1
 
     Private _originalSize As Size = Nothing
     Private _scale As Single = 1
@@ -19,11 +22,28 @@
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         VerificarPictureBox()
-        DrawCo.Contenedor = PictureBox1
+        DrawCo.Conteiner = PictureBox1
         DrawCo.Escala = _scale
         PlotC = New Plot2DComponent(DrawCo)
         ' original = New Bitmap(Panel1.BackgroundImage)
         ActualizarListado()
+        CargarInicial()
+    End Sub
+
+    Private Sub CargarInicial()
+        With PlotC.X_axis
+            .End_Pont.X = 394
+            .End_Pont.Y = 313
+            .Start_Point.X = 108
+            .Start_Point.Y = 313
+        End With
+
+        With PlotC.Y_axis
+            .End_Pont.X = 108
+            .End_Pont.Y = 25.9
+            .Start_Point.X = 108
+            .Start_Point.Y = 313
+        End With
     End Sub
 
     Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
@@ -93,7 +113,7 @@
             'DrawCo.Escala = (PictureBox1.Width - 5) / _originalSize.Width
             DrawCo.Escala = _scale
 
-            DrawCo.Actualizar()
+            DrawCo.Refresh()
 
             'Actualizo la posición del panel
             'Panel1.HorizontalScroll.Value = prevalor * (1 + _scaleDelta)
@@ -144,8 +164,6 @@
 
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-
-        OpenImage()
     End Sub
 
 
@@ -159,7 +177,7 @@
 
         If ofd.ShowDialog() = DialogResult.OK Then
             original = New Bitmap(ofd.FileName)
-            Panel1.BackgroundImage = original
+            PictureBox1.Image = original
             VerificarPictureBox()
         End If
 
@@ -222,12 +240,12 @@
 
     End Sub
 
-    Private Sub DrawCo_MoverArrastrar(pos As PointF) Handles DrawCo.MoverArrastrar_Inicio
+    Private Sub DrawCo_MoverArrastrar(pos As PointF) Handles DrawCo.MoveEditionStart
         pntStart = New Point(pos.X, pos.Y)
         PictureBox1.Cursor = Cursors.SizeAll
     End Sub
 
-    Private Sub DrawCo_MoverArrastrar_Desplazamiento(pos As PointF) Handles DrawCo.MoverArrastrar_Desplazamiento
+    Private Sub DrawCo_MoverArrastrar_Desplazamiento(pos As PointF) Handles DrawCo.MoveEditionStart_Displacement
         Arrastrar(pos)
     End Sub
 
@@ -236,7 +254,7 @@
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        PlotC.AgregarSerie_ConPuntos()
+        PlotC.AddSeriesAndEdit()
         ActualizarListado()
     End Sub
 
@@ -260,7 +278,15 @@
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
-        TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Matlab)
+
+        Select Case ComboBox2.SelectedIndex
+            Case 0
+                TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Matlab)
+            Case 1
+                TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Python)
+        End Select
+
+
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
@@ -279,5 +305,28 @@
         ActualizarListado()
 
 
+    End Sub
+
+    Private Sub FromClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FromClipboardToolStripMenuItem.Click
+        If Clipboard.ContainsImage() = True Then
+            PictureBox1.Image = Clipboard.GetImage
+            VerificarPictureBox()
+        End If
+    End Sub
+
+    Private Sub FromFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FromFileToolStripMenuItem.Click
+        OpenImage()
+    End Sub
+
+    Private Sub ToolStripButton5_Click(sender As Object, e As EventArgs) Handles ToolStripButton5.Click
+        Dim fso As New SaveFileDialog
+        fso.Filter = "Level-5 MATLAB Mat (*.mat)|*.mat|Delimited Text Files (*.CSV)|*.csv| NIST MatrixMarket Text Files (*.mtx)|*.mtx"
+        If fso.ShowDialog() = DialogResult.OK Then
+            PlotC.Save(fso.FileName)
+        End If
+    End Sub
+
+    Private Sub ToolStripButton1_ButtonClick(sender As Object, e As EventArgs) Handles ToolStripButton1.ButtonClick
+        OpenImage()
     End Sub
 End Class
