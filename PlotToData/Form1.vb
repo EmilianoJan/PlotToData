@@ -295,6 +295,7 @@ Public Class Form1
 
     Private Sub SeleccionarObjeto(Indice As Integer)
         PropertyGrid1.SelectedObject = ObjectList(Indice)
+        GroupBox1.Text = ObjectList(Indice).Name
         ActualizarListado()
     End Sub
 
