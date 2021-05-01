@@ -1,6 +1,6 @@
 ﻿
 ''' <summary>
-''' Representa un punto en un plano bidimensional.
+''' Represents a point on a two-dimensional plane.
 ''' </summary>
 <Serializable> Public Class PointComponent
 
@@ -20,8 +20,8 @@
 
 	Public Event Click()
 	Public Event PosChange()
-	Public Event EdicionPuntoTerminada(e As MouseEventArgs)
-	Public Event EdicionPuntoTerminada_Completo(e As MouseEventArgs, Sender As PointComponent)
+	Public Event PointEditionFinished(e As MouseEventArgs)
+	Public Event PointEditionFinished_Sender(e As MouseEventArgs, Sender As PointComponent)
 	Public Event KeyPress(e As KeyEventArgs, Sender As PointComponent)
 
 	Dim WithEvents Contenedor As DrawData
@@ -36,7 +36,7 @@
 
 	Sub New(Conten As DrawData)
 		Contenedor = Conten
-		AddHandler Conten.Contenedor.Paint, AddressOf MyPanel_Paint
+		AddHandler Conten.Conteiner.Paint, AddressOf MyPanel_Paint
 		Lab = New Label
 		With Lab
 			.Height = 10
@@ -48,10 +48,10 @@
 			.BackColor = Color.Black
 
 		End With
-		Conten.Contenedor.Controls.Add(Lab)
+		Conten.Conteiner.Controls.Add(Lab)
 		Lab.BringToFront()
 		Moviendo = False
-		Pane = Conten.Contenedor
+		Pane = Conten.Conteiner
 	End Sub
 
 
@@ -68,7 +68,7 @@
 
 	End Sub
 
-	Private Sub Contenedor_CambioEscala() Handles Contenedor.CambioEscala
+	Private Sub Contenedor_CambioEscala() Handles Contenedor.ScaleChange
 		'X = X * Contenedor.Escala
 		'Y = Y * Contenedor.Escala
 		With Lab
@@ -94,7 +94,7 @@
 			End If
 		ElseIf e.Button = MouseButtons.Middle Then
 			If Moviendo = True Then
-				Contenedor.MoverArrastrarAccion(New PointF(e.X, e.Y))
+				Contenedor.MoveDragAcction(New PointF(e.X, e.Y))
 			End If
 
 		End If
@@ -111,7 +111,7 @@
 		'	Moviendo = True
 		'End If
 		If (e.Button = MouseButtons.Middle) And (Moviendo = True) Then
-			Contenedor.MoveArrastrar(New PointF(e.X, e.Y))
+			Contenedor.NodeStartEdition(New PointF(e.X, e.Y))
 		End If
 	End Sub
 
@@ -127,8 +127,8 @@
 					omitirUpEnClick = False
 				Else
 					Moviendo = False
-					RaiseEvent EdicionPuntoTerminada(e)
-					RaiseEvent EdicionPuntoTerminada_Completo(e, Me)
+					RaiseEvent PointEditionFinished(e)
+					RaiseEvent PointEditionFinished_Sender(e, Me)
 				End If
 
 			End If
@@ -139,7 +139,7 @@
 
 		If e.Button = MouseButtons.Middle Then
 			If Moviendo = True Then
-				Contenedor.MoverArrastrarAccion(New PointF(e.X, e.Y))
+				Contenedor.MoveDragAcction(New PointF(e.X, e.Y))
 			End If
 		Else
 			If Moviendo = True Then
@@ -162,8 +162,8 @@
 			If Moviendo = True Then
 
 				Moviendo = False
-				RaiseEvent EdicionPuntoTerminada(e)
-				RaiseEvent EdicionPuntoTerminada_Completo(e, Me)
+				RaiseEvent PointEditionFinished(e)
+				RaiseEvent PointEditionFinished_Sender(e, Me)
 			End If
 		End If
 	End Sub
@@ -175,25 +175,28 @@
 
 		If Moviendo = True Then
 			omitirUpEnClick = True
-			IniciadoMOvimiento()
+			StartEdition()
 		Else
-			Contenedor.CambiarVisibilidadNodos(True)
+			Contenedor.ChangeNodeVisibility(True)
 			'Lab.Cursor = Cursors.Cross
-			RaiseEvent EdicionPuntoTerminada(e)
-			RaiseEvent EdicionPuntoTerminada_Completo(e, Me)
+			RaiseEvent PointEditionFinished(e)
+			RaiseEvent PointEditionFinished_Sender(e, Me)
 		End If
 	End Sub
 
-	Public Sub IniciadoMOvimiento()
+	''' <summary>
+	''' Routine that starts the edition of the point
+	''' </summary>
+	Public Sub StartEdition()
 		Moviendo = True
-		Contenedor.CambiarVisibilidadNodos(False)
+		Contenedor.ChangeNodeVisibility(False)
 		Lab.Cursor = Cursors.Cross
 		RaiseEvent Click()
 	End Sub
 
 
 
-	Private Sub Contenedor_VisibilidadNodos(Visible As Boolean) Handles Contenedor.VisibilidadNodos
+	Private Sub Contenedor_VisibilidadNodos(Visible As Boolean) Handles Contenedor.NodeVisible
 		If Moviendo = False Then
 			Lab.Visible = Visible
 		Else
@@ -201,15 +204,18 @@
 		End If
 	End Sub
 
-	Public Sub DetenerMovimiento()
+	''' <summary>
+	''' Routine that stops the edition of the point
+	''' </summary>
+	Public Sub StopEdition()
 		Moviendo = False
-		Contenedor.CambiarVisibilidadNodos(True)
+		Contenedor.ChangeNodeVisibility(True)
 	End Sub
 	''' <summary>
-	''' Rutina que elimina el punto
+	''' Routine that eliminates the point
 	''' </summary>
 	Public Sub DeletePoint()
-		RemoveHandler Contenedor.Contenedor.Paint, AddressOf MyPanel_Paint
+		RemoveHandler Contenedor.Conteiner.Paint, AddressOf MyPanel_Paint
 		Pane = Nothing
 		Lab.Dispose()
 		Lab = Nothing
@@ -221,7 +227,7 @@
 		If Moviendo = True Then
 			Select Case e.KeyCode
 				Case Keys.Escape
-					DetenerMovimiento() ' detengo el movimiento
+					StopEdition() ' detengo el movimiento
 				Case Else
 					RaiseEvent KeyPress(e, Me)
 					'hay que eliminar el punto de la serie. 

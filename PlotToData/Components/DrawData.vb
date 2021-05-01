@@ -5,34 +5,34 @@
 ''' </summary>
 Public Class DrawData
 
-	Public WithEvents Contenedor As PictureBox
+	Public WithEvents Conteiner As PictureBox
 
 	Public Escala As Double
 
-	Public Event CambioEscala()
+	Public Event ScaleChange()
 
-	Public Event VisibilidadNodos(Visible As Boolean)
+	Public Event NodeVisible(Visible As Boolean)
 
-	Public Event MoverArrastrar_Inicio(pos As PointF)
+	Public Event MoveEditionStart(pos As PointF)
 
-	Public Event MoverArrastrar_Desplazamiento(pos As PointF)
+	Public Event MoveEditionStart_Displacement(pos As PointF)
 
 	Public Event KeyPressEvent(e As KeyEventArgs)
 
-	Public Sub Actualizar()
-		RaiseEvent CambioEscala()
+	Public Sub Refresh()
+		RaiseEvent ScaleChange()
 	End Sub
 
-	Public Sub CambiarVisibilidadNodos(Visible As Boolean)
-		RaiseEvent VisibilidadNodos(Visible)
+	Public Sub ChangeNodeVisibility(Visible As Boolean)
+		RaiseEvent NodeVisible(Visible)
 	End Sub
 
-	Public Sub MoveArrastrar(Pos As PointF)
-		RaiseEvent MoverArrastrar_Inicio(Pos)
+	Public Sub NodeStartEdition(Pos As PointF)
+		RaiseEvent MoveEditionStart(Pos)
 	End Sub
 
-	Public Sub MoverArrastrarAccion(Pos As PointF)
-		RaiseEvent MoverArrastrar_Desplazamiento(Pos)
+	Public Sub MoveDragAcction(Pos As PointF)
+		RaiseEvent MoveEditionStart_Displacement(Pos)
 	End Sub
 
 	Public Sub KeyPressEve(e As KeyEventArgs)

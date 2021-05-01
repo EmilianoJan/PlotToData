@@ -2,17 +2,30 @@
 ''' <summary>
 ''' Corresponde a un grafico bidimensional
 ''' </summary>
+<System.ComponentModel.Category("Figure")>
+<System.ComponentModel.Description("Configurations of all the elements that make up the chart")>
 <Serializable> Public Class Plot2DComponent
 	Implements NameInterface
+
+	<System.ComponentModel.Category("Series")>
+	<System.ComponentModel.Description("Contains the X-axis configurations of the figure")>
+	<System.ComponentModel.TypeConverter(GetType(System.ComponentModel.ExpandableObjectConverter))>
 	Public Property X_axis As ComponentAxis
 
+	<System.ComponentModel.Category("Series")>
+	<System.ComponentModel.Description("Contains the Y-axis configurations of the figure")>
+	<System.ComponentModel.TypeConverter(GetType(System.ComponentModel.ExpandableObjectConverter))>
 	Public Property Y_axis As ComponentAxis
 
+	<System.ComponentModel.Category("Plot")>
+	<System.ComponentModel.Description("Contains the name of the figure")>
 	Public Property Title As String = "Plot" Implements NameInterface.Name
 
+	<System.ComponentModel.Category("Series")>
+	<System.ComponentModel.Description("It has a list of data series.")>
 	Public Property Series As New List(Of SerieComponet)
 
-	Public Property Corected_Series As New List(Of SerieDeDatos)
+	Public Corected_Series As New List(Of DataSeries)
 
 	Dim WithEvents conten As DrawData
 
@@ -48,7 +61,10 @@
 		Y_axis.Name = "Y Axis"
 	End Sub
 
-	Public Sub AgregarSerie_ConPuntos()
+	''' <summary>
+	''' Add a new data series, automatically name it, and set it to start point-add edit mode
+	''' </summary>
+	Public Sub AddSeriesAndEdit()
 		Dim seri As New SerieComponet(conten, AutoIncrementalSerialIndex)
 		AutoIncrementalSerialIndex = AutoIncrementalSerialIndex + 1
 		Series.Add(seri)
@@ -65,7 +81,11 @@
 		RaiseEvent Click_on_axis(sender)
 	End Sub
 
-
+	''' <summary>
+	''' Function that returns the code that generates a figure in different languages
+	''' </summary>
+	''' <param name="Code"></param>
+	''' <returns></returns>
 	Public Function GenerateCode(Code As TypesCode) As String
 		RefreshValues()
 		Dim salida As String = ""
@@ -78,6 +98,10 @@
 		Return salida
 	End Function
 
+	''' <summary>
+	''' Function that saves the data of the figure. Autodetects the format to save from the file suffix
+	''' </summary>
+	''' <param name="Dir"></param>
 	Public Sub Save(Dir As String)
 		RefreshValues()
 		Dim Format As SaveFormatOptions
@@ -126,7 +150,7 @@
 	Private Sub RefreshValues()
 		Corected_Series.Clear()
 		For Each seri In Series
-			Dim ser As New SerieDeDatos
+			Dim ser As New DataSeries
 			ser.NombreX = X_axis.Name
 			ser.NombreY = seri.Serie_Name
 			Corected_Series.Add(ser)
@@ -232,8 +256,6 @@
 	Private Function MatlabSeriesName(Name As String) As String
 		Dim sal As String
 		sal = Strings.Replace(Name, " ", "_")
-
-
 		Return sal
 	End Function
 

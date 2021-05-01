@@ -19,7 +19,7 @@
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         VerificarPictureBox()
-        DrawCo.Contenedor = PictureBox1
+        DrawCo.Conteiner = PictureBox1
         DrawCo.Escala = _scale
         PlotC = New Plot2DComponent(DrawCo)
         ' original = New Bitmap(Panel1.BackgroundImage)
@@ -110,7 +110,7 @@
             'DrawCo.Escala = (PictureBox1.Width - 5) / _originalSize.Width
             DrawCo.Escala = _scale
 
-            DrawCo.Actualizar()
+            DrawCo.Refresh()
 
             'Actualizo la posición del panel
             'Panel1.HorizontalScroll.Value = prevalor * (1 + _scaleDelta)
@@ -237,12 +237,12 @@
 
     End Sub
 
-    Private Sub DrawCo_MoverArrastrar(pos As PointF) Handles DrawCo.MoverArrastrar_Inicio
+    Private Sub DrawCo_MoverArrastrar(pos As PointF) Handles DrawCo.MoveEditionStart
         pntStart = New Point(pos.X, pos.Y)
         PictureBox1.Cursor = Cursors.SizeAll
     End Sub
 
-    Private Sub DrawCo_MoverArrastrar_Desplazamiento(pos As PointF) Handles DrawCo.MoverArrastrar_Desplazamiento
+    Private Sub DrawCo_MoverArrastrar_Desplazamiento(pos As PointF) Handles DrawCo.MoveEditionStart_Displacement
         Arrastrar(pos)
     End Sub
 
@@ -251,7 +251,7 @@
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        PlotC.AgregarSerie_ConPuntos()
+        PlotC.AddSeriesAndEdit()
         ActualizarListado()
     End Sub
 

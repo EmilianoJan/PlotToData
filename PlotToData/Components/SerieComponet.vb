@@ -32,7 +32,7 @@
 	Sub New(Component As DrawData, SerieIndex As Integer)
 		Conten = Component
 		Serie_Index = SerieIndex
-		AddHandler Conten.Contenedor.Paint, AddressOf MyPanel_Paint
+		AddHandler Conten.Conteiner.Paint, AddressOf MyPanel_Paint
 	End Sub
 
 	Public Sub IniciarAgregadoPuntos()
@@ -49,7 +49,7 @@
 		'End If
 		Dim punto As New PointComponent(Conten)
 		'AddHandler punto.EdicionPuntoTerminada, AddressOf EventosPuntos
-		punto.IniciadoMOvimiento()
+		punto.StartEdition()
 		If AgregarAlFinal = True Then
 			Points.Add(punto)
 			UltimoPuntoIndi = Points.Count - 1
@@ -61,7 +61,7 @@
 
 		punto.SerieIndex = UltimoPuntoIndi
 		UltimoPunto = punto
-		AddHandler punto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
+		AddHandler punto.PointEditionFinished_Sender, AddressOf TodosLosPuntos
 		AddHandler punto.KeyPress, AddressOf PuntoKeyPress
 		AddHandler punto.Click, AddressOf ClickInNodo
 	End Sub
@@ -76,10 +76,10 @@
 
 	Private Sub DetenerAgregado()
 		If IsNothing(UltimoPunto) = False Then
-			RemoveHandler UltimoPunto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
+			RemoveHandler UltimoPunto.PointEditionFinished_Sender, AddressOf TodosLosPuntos
 			RemoveHandler UltimoPunto.KeyPress, AddressOf PuntoKeyPress
 			RemoveHandler UltimoPunto.Click, AddressOf ClickInNodo
-			UltimoPunto.DetenerMovimiento()
+			UltimoPunto.StopEdition()
 			Points.RemoveAt(UltimoPuntoIndi)
 			UltimoPunto.DeletePoint()
 			UltimoPuntoIndi = 0
@@ -107,7 +107,7 @@
 		End If
 	End Sub
 
-	Private Sub UltimoPunto_EdicionPuntoTerminada(e As MouseEventArgs) Handles UltimoPunto.EdicionPuntoTerminada
+	Private Sub UltimoPunto_EdicionPuntoTerminada(e As MouseEventArgs) Handles UltimoPunto.PointEditionFinished
 		If e.Button = MouseButtons.Left Then
 			agregarPunto()
 		ElseIf e.Button = MouseButtons.Right Then
@@ -151,7 +151,7 @@
 				RaiseEvent Deleting_Series(Me)
 				' TODO: dispose managed state (managed objects)
 				For Each punto In Points
-					RemoveHandler punto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
+					RemoveHandler punto.PointEditionFinished_Sender, AddressOf TodosLosPuntos
 					RemoveHandler punto.KeyPress, AddressOf PuntoKeyPress
 					RemoveHandler punto.Click, AddressOf ClickInNodo
 					punto.DeletePoint()

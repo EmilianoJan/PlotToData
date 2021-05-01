@@ -3,7 +3,7 @@
 ''' <summary>
 ''' Objeto que representa una serie de datos X,Y
 ''' </summary>
-<Serializable()> Public Class SerieDeDatos
+<Serializable()> Public Class DataSeries
 
     ''' <summary>
     ''' Estructura que modela una dupla de valores 
@@ -35,39 +35,6 @@
     ''' </summary>
     Public NombreY As String
 
-    '''' <summary>
-    '''' Convierte los valores de una serie visualizada en un CHART a un vector de datos de mediciones (con campos genricos)
-    '''' </summary>
-    '''' <param name="Serie">Serie de datos a convertir</param>
-    '''' <param name="Append">Indica si se anexan los datos a los ya cargados o no</param>
-    '''' <remarks></remarks>
-    'Public Sub ConvertirChartSerieEnDatos(ByVal Serie As System.Windows.Forms.DataVisualization.Charting.Series, Optional Append As Boolean = False)
-
-    '    If Append = False Then
-    '        Datos.Clear()
-    '    End If
-
-    '    Dim Valores As DuplaDeValores
-    '    Dim i As System.Windows.Forms.DataVisualization.Charting.DataPoint
-    '    For Each i In Serie.Points
-    '        Valores.X = i.XValue
-    '        Valores.Y = i.YValues(0)
-    '        Datos.Add(Valores)
-    '    Next
-    'End Sub
-    '''' <summary>
-    '''' Convierte la serie de datos a DataVisualization.Charting.Series
-    '''' </summary>
-    '''' <returns> Devuelve una serie DataVisualization.Charting.Series </returns>
-    'Public Function ConvertirDatosAChartSerie() As DataVisualization.Charting.Series
-    '    Dim ser As New DataVisualization.Charting.Series
-    '    Dim i As Integer
-    '    For i = 0 To Datos.Count - 1
-    '        ser.Points.AddXY(Datos(i).X, Datos(i).Y)
-    '    Next
-    '    ser.ChartType = DataVisualization.Charting.SeriesChartType.FastLine
-    '    ConvertirDatosAChartSerie = ser
-    'End Function
 
 
     ''' <summary>
@@ -159,7 +126,7 @@ End Class
 ''' <summary>
 ''' Objeto que representa una serie de datos complejos orientado a las mediciones realizadas con el lockin
 ''' </summary>
-<Serializable()> Public Class SerieDeDatosComplejos
+<Serializable()> Public Class ComplexDataSeries
 
     ''' <summary>
     ''' Estructura de datos que representa señales principalmente fototérmicas
@@ -188,29 +155,7 @@ End Class
     ''' </summary>
     Public NombreSerie As String
 
-    '''' <summary>
-    '''' Convierte los valores de una serie visualizada en un CHART a un vector de datos de mediciones (con campos genricos)
-    '''' </summary>
-    '''' <param name="Amplitud">Serie de datos de amplitudes convertir</param>
-    '''' <param name="RetadoDeFase">Serie de datos de retardos de fase convertir</param>
-    '''' <param name="Append">Indica si se anexan los datos a los ya cargados o no</param>
-    '''' <remarks></remarks>
-    'Public Sub ConvertirChartSerieEnDatos(ByVal Amplitud As System.Windows.Forms.DataVisualization.Charting.Series, ByVal RetadoDeFase As System.Windows.Forms.DataVisualization.Charting.Series, Optional Append As Boolean = False)
 
-    '    If Append = False Then
-    '        Datos.Clear()
-    '    End If
-
-    '    Dim Valores As MedicionAdquiridaComplejaEstructura
-    '    Dim i As Integer
-
-    '    For i = 0 To Amplitud.Points.Count - 1 'Amplitud.Points
-    '        Valores.Frecuencia = Amplitud.Points(i).XValue
-    '        Valores.Amplitud = Amplitud.Points(i).YValues(0)
-    '        Valores.RetardoDeFase = RetadoDeFase.Points(i).YValues(0)
-    '        Datos.Add(Valores)
-    '    Next
-    'End Sub
 
     ''' <summary>
     ''' Convierte las series cargadas a codigo Octave
@@ -269,26 +214,7 @@ End Class
         Retardo_de_fase
     End Enum
 
-    '''' <summary>
-    '''' Convierte una serie de datos tipo -TiposDeSeries- a una serie de datos para ser representada en un chart.
-    '''' </summary>
-    '''' <param name="Serie">Serie de datos a convertir.</param>
-    '''' <returns>Serie DataVisualization.Charting.Series de los datos cargados.</returns>
-    'Public Function ConvertirDatosAChartSerie(Serie As TiposDeSeries) As DataVisualization.Charting.Series
-    '    Dim ser As New DataVisualization.Charting.Series
-    '    Dim i As Integer
-    '    For i = 0 To Datos.Count - 1
 
-    '        If Serie = TiposDeSeries.Amplitud Then
-    '            ser.Points.AddXY(Datos(i).Frecuencia, Datos(i).Amplitud)
-    '        Else
-    '            ser.Points.AddXY(Datos(i).Frecuencia, Datos(i).RetardoDeFase)
-    '        End If
-
-    '    Next
-    '    ser.ChartType = DataVisualization.Charting.SeriesChartType.FastLine
-    '    ConvertirDatosAChartSerie = ser
-    'End Function
 
     ''' <summary>
     ''' Esta función convierte los datos en dos arrays tipo single. Los datos contenidos en los parámetros

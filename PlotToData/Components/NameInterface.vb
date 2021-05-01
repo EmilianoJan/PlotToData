@@ -1,6 +1,6 @@
 ﻿
 ''' <summary>
-''' Implementa la interface de nombres
+''' Describe an interface of names
 ''' </summary>
 Public Interface NameInterface
 	Property Name As String
