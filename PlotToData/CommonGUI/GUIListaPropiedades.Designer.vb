@@ -51,8 +51,8 @@
 			'SplitContainer1.Panel2
 			'
 			Me.SplitContainer1.Panel2.Controls.Add(Me.PropertyGrid1)
-			Me.SplitContainer1.Size = New System.Drawing.Size(800, 450)
-			Me.SplitContainer1.SplitterDistance = 181
+			Me.SplitContainer1.Size = New System.Drawing.Size(439, 460)
+			Me.SplitContainer1.SplitterDistance = 113
 			Me.SplitContainer1.TabIndex = 0
 			'
 			'ListBox1
@@ -61,7 +61,7 @@
 			Me.ListBox1.FormattingEnabled = True
 			Me.ListBox1.Location = New System.Drawing.Point(0, 25)
 			Me.ListBox1.Name = "ListBox1"
-			Me.ListBox1.Size = New System.Drawing.Size(800, 156)
+			Me.ListBox1.Size = New System.Drawing.Size(439, 88)
 			Me.ListBox1.TabIndex = 0
 			'
 			'ToolStrip1
@@ -69,7 +69,7 @@
 			Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1})
 			Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
 			Me.ToolStrip1.Name = "ToolStrip1"
-			Me.ToolStrip1.Size = New System.Drawing.Size(800, 25)
+			Me.ToolStrip1.Size = New System.Drawing.Size(439, 25)
 			Me.ToolStrip1.TabIndex = 1
 			Me.ToolStrip1.Text = "ToolStrip1"
 			'
@@ -86,14 +86,14 @@
 			Me.PropertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill
 			Me.PropertyGrid1.Location = New System.Drawing.Point(0, 0)
 			Me.PropertyGrid1.Name = "PropertyGrid1"
-			Me.PropertyGrid1.Size = New System.Drawing.Size(800, 265)
+			Me.PropertyGrid1.Size = New System.Drawing.Size(439, 343)
 			Me.PropertyGrid1.TabIndex = 0
 			'
 			'GUIListaPropiedades
 			'
 			Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
 			Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-			Me.ClientSize = New System.Drawing.Size(800, 450)
+			Me.ClientSize = New System.Drawing.Size(439, 460)
 			Me.Controls.Add(Me.SplitContainer1)
 			Me.Name = "GUIListaPropiedades"
 			Me.Text = "ListaPropiedades"

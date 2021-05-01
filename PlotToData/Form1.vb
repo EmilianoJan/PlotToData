@@ -1,4 +1,7 @@
-﻿Public Class Form1
+﻿Imports PlotToData.Plot
+
+
+Public Class Form1
 
     Private _originalSize As Size = Nothing
     Private _scale As Single = 1
@@ -275,7 +278,15 @@
     End Sub
 
     Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
-        TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Matlab)
+
+        Select Case ComboBox2.SelectedIndex
+            Case 0
+                TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Matlab)
+            Case 1
+                TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Python)
+        End Select
+
+
     End Sub
 
     Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
