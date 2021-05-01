@@ -2,6 +2,8 @@
 
 ![imagen](https://user-images.githubusercontent.com/19601324/116791914-da0afe00-aa93-11eb-8ca9-e7ae9465272e.png)
 
+[Download PlotToData.exe](https://github.com/EmilianoJan/PlotToData/releases/)
+
 Program that allows to extract the points of figures that are in image format. Practical tool to extract datasets from papers.
 
 ## Features:
@@ -57,5 +59,33 @@ grid on
 grid minor
 legend('Serie 1' ,'LogSerie' ) 
 ```
+
+## Python figure example 
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+fig, ax = plt.figure()
+
+# Loading series
+Serie_1X = [ 0.03496503, 0.3496504, 0.8391609, 1.048951] 
+Serie_1Y = [ 0.9752699, 1.95054, 5.921282, 9.996517] 
+Serie_2X = [ 0.1048951, 0.2447552, 0.979021, 2.972028, 10.06993] 
+Serie_2Y = [ 0, 0.2438175, 1.010101, 2.92581, 9.961686] 
+Serie_3X = [ 1.258741, 1.993007, 2.727273, 4.86014, 7.412588, 9.93007] 
+Serie_3Y = [ 0.2089864, 0.6617903, 0.9404389, 1.532567, 1.985371, 2.264019] 
+ax.plot( Serie_1X , Serie_1Y, label= 'Serie 1')
+ax.plot( Serie_2X , Serie_2Y, label= 'Serie 2')
+ax.plot( Serie_3X , Serie_3Y, label= 'Serie 3')
+ax.set_xlabel('X Axis')
+ax.set_ylabel('Y Axis')
+ax.set_title('Plot')
+ax.grid(True)
+plt.legend()
+plt.show()
+
+```
+
+[Download PlotToData.exe](https://github.com/EmilianoJan/PlotToData/releases/)
 
 
