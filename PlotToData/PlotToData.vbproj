@@ -75,9 +75,11 @@
   <ItemGroup>
     <Compile Include="Components\ComponentAxis.vb" />
     <Compile Include="Components\DrawData.vb" />
+    <Compile Include="Components\NameInterface.vb" />
     <Compile Include="Components\Plot2DComponent.vb" />
     <Compile Include="Components\PointComponent.vb" />
     <Compile Include="Components\SerieComponet.vb" />
+    <Compile Include="Components\SerieDatos.vb" />
     <Compile Include="Form1.vb">
       <SubType>Form</SubType>
     </Compile>

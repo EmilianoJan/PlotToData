@@ -2,9 +2,10 @@
 ''' <summary>
 ''' Representa una serie de datos
 ''' </summary>
-Public Class SerieComponet
+<Serializable> Public Class SerieComponet
+	Implements NameInterface
 
-	Public Property Serie_Name As String
+	Public Property Serie_Name As String Implements NameInterface.Name
 
 	Public Property Points As New List(Of PointComponent)
 
@@ -14,6 +15,8 @@ Public Class SerieComponet
 	Dim WithEvents UltimoPunto As PointComponent
 	Dim UltimoPuntoIndi As Integer = 0
 	Dim AgregarAlFinal As Boolean = True
+
+	Public Event Click(sender As SerieComponet)
 	Sub New(Component As DrawData)
 		Conten = Component
 		AddHandler Conten.Contenedor.Paint, AddressOf MyPanel_Paint
@@ -47,6 +50,7 @@ Public Class SerieComponet
 		UltimoPunto = punto
 		AddHandler punto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
 		AddHandler punto.KeyPress, AddressOf PuntoKeyPress
+		AddHandler punto.Click, AddressOf ClickInNodo
 	End Sub
 
 	Private Sub ActualizarIndicesPuntos()
@@ -61,6 +65,7 @@ Public Class SerieComponet
 		If IsNothing(UltimoPunto) = False Then
 			RemoveHandler UltimoPunto.EdicionPuntoTerminada_Completo, AddressOf TodosLosPuntos
 			RemoveHandler UltimoPunto.KeyPress, AddressOf PuntoKeyPress
+			RemoveHandler UltimoPunto.Click, AddressOf ClickInNodo
 			UltimoPunto.DetenerMovimiento()
 			Points.RemoveAt(UltimoPuntoIndi)
 			UltimoPunto.DeletePoint()
@@ -94,6 +99,7 @@ Public Class SerieComponet
 			agregarPunto()
 		ElseIf e.Button = MouseButtons.Right Then
 			DetenerAgregado()
+			ActualizarIndicesPuntos()
 		End If
 	End Sub
 
@@ -120,6 +126,10 @@ Public Class SerieComponet
 				DetenerAgregado()
 				ActualizarIndicesPuntos()
 		End Select
+	End Sub
+
+	Private Sub ClickInNodo()
+		RaiseEvent Click(Me)
 	End Sub
 
 End Class

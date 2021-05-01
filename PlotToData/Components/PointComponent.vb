@@ -2,11 +2,21 @@
 ''' <summary>
 ''' Representa un punto en un plano bidimensional.
 ''' </summary>
-Public Class PointComponent
+<Serializable> Public Class PointComponent
 
 	Public Property X As Double
 	Public Property Y As Double
 
+	Public Property Node_Color As Color
+		Get
+			Return BackNodeColor
+		End Get
+		Set(value As Color)
+			BackNodeColor = value
+			Lab.BackColor = BackNodeColor
+		End Set
+	End Property
+	Dim BackNodeColor As Color = Color.Black
 
 	Public Event Click()
 	Public Event PosChange()
@@ -92,7 +102,7 @@ Public Class PointComponent
 
 	Private Sub Lab_MouseLeave(sender As Object, e As EventArgs) Handles Lab.MouseLeave
 		'If  = MouseButtons.None Then
-		Lab.BackColor = Color.Black
+		Lab.BackColor = BackNodeColor
 		'End If
 	End Sub
 
@@ -156,7 +166,7 @@ Public Class PointComponent
 				RaiseEvent EdicionPuntoTerminada_Completo(e, Me)
 			End If
 		End If
-    End Sub
+	End Sub
 
 	Dim omitirUpEnClick As Boolean
 	Private Sub Lab_Click(sender As Object, e As EventArgs) Handles Lab.Click
@@ -178,7 +188,7 @@ Public Class PointComponent
 		Moviendo = True
 		Contenedor.CambiarVisibilidadNodos(False)
 		Lab.Cursor = Cursors.Cross
-
+		RaiseEvent Click()
 	End Sub
 
 

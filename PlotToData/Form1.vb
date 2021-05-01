@@ -8,7 +8,7 @@
     Dim pntStart As Point
     Dim PuntoAMover As Point
 
-    Dim PlotC As Plot2DComponent
+    Dim WithEvents PlotC As Plot2DComponent
     Dim WithEvents DrawCo As New DrawData
     Dim original As Bitmap
     Private Sub PictureBox1_Click(sender As Object, e As EventArgs)
@@ -225,8 +225,8 @@
         End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        PlotC.AgregarSerie_ConPuntos()
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
+
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
@@ -249,5 +249,32 @@
 
     Private Sub Form1_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         DrawCo.KeyPressEve(e)
+    End Sub
+
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        PlotC.AgregarSerie_ConPuntos()
+    End Sub
+
+    Private Sub PlotC_Click_on_Serie(sender As SerieComponet) Handles PlotC.Click_on_Serie
+        'GroupBox1.Text = sender.
+        PropObjetos(sender)
+    End Sub
+
+    Private Sub PlotC_Click_on_axis(sender As ComponentAxis) Handles PlotC.Click_on_axis
+        PropObjetos(sender)
+    End Sub
+    Private Sub PropObjetos(objeto As Object)
+
+        If GetType(NameInterface).IsAssignableFrom(objeto.GetType) Then
+
+            Dim refe As NameInterface = objeto
+            GroupBox1.Text = refe.Name
+        End If
+        PropertyGrid1.SelectedObject = objeto
+
+    End Sub
+
+    Private Sub ComboBox2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox2.SelectedIndexChanged
+        TextBox1.Text = PlotC.GenerateCode(Plot2DComponent.TypesCode.Matlab)
     End Sub
 End Class

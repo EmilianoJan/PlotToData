@@ -26,16 +26,24 @@ Partial Class Form1
 		Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
 		Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
 		Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+		Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
 		Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
 		Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
 		Me.TabControl1 = New System.Windows.Forms.TabControl()
 		Me.TabPage1 = New System.Windows.Forms.TabPage()
-		Me.Button1 = New System.Windows.Forms.Button()
+		Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+		Me.PropertyGrid1 = New System.Windows.Forms.PropertyGrid()
+		Me.ComboBox1 = New System.Windows.Forms.ComboBox()
 		Me.TabPage2 = New System.Windows.Forms.TabPage()
 		Me.TabPage3 = New System.Windows.Forms.TabPage()
 		Me.Panel1 = New System.Windows.Forms.Panel()
 		Me.PictureBox1 = New System.Windows.Forms.PictureBox()
 		Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+		Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
+		Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+		Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+		Me.ComboBox2 = New System.Windows.Forms.ComboBox()
+		Me.TextBox1 = New System.Windows.Forms.TextBox()
 		Me.ToolStrip1.SuspendLayout()
 		CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SplitContainer1.Panel1.SuspendLayout()
@@ -43,14 +51,19 @@ Partial Class Form1
 		Me.SplitContainer1.SuspendLayout()
 		Me.TabControl1.SuspendLayout()
 		Me.TabPage1.SuspendLayout()
+		Me.GroupBox1.SuspendLayout()
+		Me.TabPage2.SuspendLayout()
+		Me.TabPage3.SuspendLayout()
 		Me.Panel1.SuspendLayout()
 		CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+		Me.ToolStrip2.SuspendLayout()
+		CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
 		Me.SuspendLayout()
 		'
 		'ToolStrip1
 		'
 		Me.ToolStrip1.AutoSize = False
-		Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2})
+		Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripSeparator1, Me.ToolStripButton2})
 		Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
 		Me.ToolStrip1.Name = "ToolStrip1"
 		Me.ToolStrip1.Size = New System.Drawing.Size(800, 56)
@@ -65,13 +78,18 @@ Partial Class Form1
 		Me.ToolStripButton1.Size = New System.Drawing.Size(89, 53)
 		Me.ToolStripButton1.Text = "Load Image"
 		'
+		'ToolStripSeparator1
+		'
+		Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+		Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 56)
+		'
 		'ToolStripButton2
 		'
 		Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
 		Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
 		Me.ToolStripButton2.Name = "ToolStripButton2"
-		Me.ToolStripButton2.Size = New System.Drawing.Size(115, 53)
-		Me.ToolStripButton2.Text = "ToolStripButton2"
+		Me.ToolStripButton2.Size = New System.Drawing.Size(76, 53)
+		Me.ToolStripButton2.Text = "Add serie"
 		'
 		'SplitContainer1
 		'
@@ -104,7 +122,8 @@ Partial Class Form1
 		'
 		'TabPage1
 		'
-		Me.TabPage1.Controls.Add(Me.Button1)
+		Me.TabPage1.Controls.Add(Me.GroupBox1)
+		Me.TabPage1.Controls.Add(Me.ComboBox1)
 		Me.TabPage1.Location = New System.Drawing.Point(4, 22)
 		Me.TabPage1.Name = "TabPage1"
 		Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
@@ -113,17 +132,39 @@ Partial Class Form1
 		Me.TabPage1.Text = "Properties"
 		Me.TabPage1.UseVisualStyleBackColor = True
 		'
-		'Button1
+		'GroupBox1
 		'
-		Me.Button1.Location = New System.Drawing.Point(118, 31)
-		Me.Button1.Name = "Button1"
-		Me.Button1.Size = New System.Drawing.Size(110, 54)
-		Me.Button1.TabIndex = 0
-		Me.Button1.Text = "Button1"
-		Me.Button1.UseVisualStyleBackColor = True
+		Me.GroupBox1.Controls.Add(Me.PropertyGrid1)
+		Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.GroupBox1.Location = New System.Drawing.Point(3, 24)
+		Me.GroupBox1.Name = "GroupBox1"
+		Me.GroupBox1.Size = New System.Drawing.Size(252, 341)
+		Me.GroupBox1.TabIndex = 1
+		Me.GroupBox1.TabStop = False
+		Me.GroupBox1.Text = "GroupBox1"
+		'
+		'PropertyGrid1
+		'
+		Me.PropertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.PropertyGrid1.Location = New System.Drawing.Point(3, 18)
+		Me.PropertyGrid1.Name = "PropertyGrid1"
+		Me.PropertyGrid1.Size = New System.Drawing.Size(246, 320)
+		Me.PropertyGrid1.TabIndex = 0
+		'
+		'ComboBox1
+		'
+		Me.ComboBox1.Dock = System.Windows.Forms.DockStyle.Top
+		Me.ComboBox1.FormattingEnabled = True
+		Me.ComboBox1.Location = New System.Drawing.Point(3, 3)
+		Me.ComboBox1.Name = "ComboBox1"
+		Me.ComboBox1.Size = New System.Drawing.Size(252, 21)
+		Me.ComboBox1.TabIndex = 0
 		'
 		'TabPage2
 		'
+		Me.TabPage2.Controls.Add(Me.DataGridView1)
+		Me.TabPage2.Controls.Add(Me.ToolStrip2)
 		Me.TabPage2.Location = New System.Drawing.Point(4, 22)
 		Me.TabPage2.Name = "TabPage2"
 		Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
@@ -134,11 +175,13 @@ Partial Class Form1
 		'
 		'TabPage3
 		'
+		Me.TabPage3.Controls.Add(Me.TextBox1)
+		Me.TabPage3.Controls.Add(Me.ComboBox2)
 		Me.TabPage3.Location = New System.Drawing.Point(4, 22)
 		Me.TabPage3.Name = "TabPage3"
 		Me.TabPage3.Size = New System.Drawing.Size(258, 368)
 		Me.TabPage3.TabIndex = 2
-		Me.TabPage3.Text = "Plot"
+		Me.TabPage3.Text = "Code"
 		Me.TabPage3.UseVisualStyleBackColor = True
 		'
 		'Panel1
@@ -171,6 +214,51 @@ Partial Class Form1
 		'
 		Me.Timer1.Interval = 1000
 		'
+		'ToolStrip2
+		'
+		Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton3})
+		Me.ToolStrip2.Location = New System.Drawing.Point(3, 3)
+		Me.ToolStrip2.Name = "ToolStrip2"
+		Me.ToolStrip2.Size = New System.Drawing.Size(252, 25)
+		Me.ToolStrip2.TabIndex = 0
+		Me.ToolStrip2.Text = "ToolStrip2"
+		'
+		'ToolStripButton3
+		'
+		Me.ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), System.Drawing.Image)
+		Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
+		Me.ToolStripButton3.Name = "ToolStripButton3"
+		Me.ToolStripButton3.Size = New System.Drawing.Size(66, 22)
+		Me.ToolStripButton3.Text = "Refresh"
+		'
+		'DataGridView1
+		'
+		Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+		Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.DataGridView1.Location = New System.Drawing.Point(3, 28)
+		Me.DataGridView1.Name = "DataGridView1"
+		Me.DataGridView1.Size = New System.Drawing.Size(252, 337)
+		Me.DataGridView1.TabIndex = 1
+		'
+		'ComboBox2
+		'
+		Me.ComboBox2.Dock = System.Windows.Forms.DockStyle.Top
+		Me.ComboBox2.FormattingEnabled = True
+		Me.ComboBox2.Items.AddRange(New Object() {"Matlab", "Python"})
+		Me.ComboBox2.Location = New System.Drawing.Point(0, 0)
+		Me.ComboBox2.Name = "ComboBox2"
+		Me.ComboBox2.Size = New System.Drawing.Size(258, 21)
+		Me.ComboBox2.TabIndex = 0
+		'
+		'TextBox1
+		'
+		Me.TextBox1.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.TextBox1.Location = New System.Drawing.Point(0, 21)
+		Me.TextBox1.Multiline = True
+		Me.TextBox1.Name = "TextBox1"
+		Me.TextBox1.Size = New System.Drawing.Size(258, 347)
+		Me.TextBox1.TabIndex = 1
+		'
 		'Form1
 		'
 		Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -190,9 +278,17 @@ Partial Class Form1
 		Me.SplitContainer1.ResumeLayout(False)
 		Me.TabControl1.ResumeLayout(False)
 		Me.TabPage1.ResumeLayout(False)
+		Me.GroupBox1.ResumeLayout(False)
+		Me.TabPage2.ResumeLayout(False)
+		Me.TabPage2.PerformLayout()
+		Me.TabPage3.ResumeLayout(False)
+		Me.TabPage3.PerformLayout()
 		Me.Panel1.ResumeLayout(False)
 		Me.Panel1.PerformLayout()
 		CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+		Me.ToolStrip2.ResumeLayout(False)
+		Me.ToolStrip2.PerformLayout()
+		CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
 		Me.ResumeLayout(False)
 
 	End Sub
@@ -206,7 +302,15 @@ Partial Class Form1
 	Friend WithEvents TabPage1 As TabPage
 	Friend WithEvents TabPage2 As TabPage
 	Friend WithEvents TabPage3 As TabPage
-	Friend WithEvents Button1 As Button
 	Friend WithEvents Timer1 As Timer
 	Friend WithEvents PictureBox1 As PictureBox
+	Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
+	Friend WithEvents GroupBox1 As GroupBox
+	Friend WithEvents PropertyGrid1 As PropertyGrid
+	Friend WithEvents ComboBox1 As ComboBox
+	Friend WithEvents DataGridView1 As DataGridView
+	Friend WithEvents ToolStrip2 As ToolStrip
+	Friend WithEvents ToolStripButton3 As ToolStripButton
+	Friend WithEvents TextBox1 As TextBox
+	Friend WithEvents ComboBox2 As ComboBox
 End Class
