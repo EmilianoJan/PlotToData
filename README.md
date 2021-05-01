@@ -44,6 +44,7 @@ To modify the properties of each of the parts, the displayed list can be used.
 
 ## Octave figure example 
 ![imagen](https://user-images.githubusercontent.com/19601324/116791974-51409200-aa94-11eb-9e91-15bfcacd39ff.png)
+**code**
 ```matlab
 % Loading series
 Serie_1 = [ 0.0137533 0.06766498; 0.2598083 0.2899769; 0.973831 1.026347; 2.938465 2.958729; 9.97113 10.01057;]; 
@@ -61,6 +62,7 @@ legend('Serie 1' ,'LogSerie' )
 ```
 
 ## Python figure example 
+**code**
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
