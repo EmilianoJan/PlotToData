@@ -80,13 +80,13 @@ Partial Class Form1
 		'FromFileToolStripMenuItem
 		'
 		Me.FromFileToolStripMenuItem.Name = "FromFileToolStripMenuItem"
-		Me.FromFileToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+		Me.FromFileToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
 		Me.FromFileToolStripMenuItem.Text = "From file"
 		'
 		'FromClipboardToolStripMenuItem
 		'
 		Me.FromClipboardToolStripMenuItem.Name = "FromClipboardToolStripMenuItem"
-		Me.FromClipboardToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+		Me.FromClipboardToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
 		Me.FromClipboardToolStripMenuItem.Text = "From clipboard"
 		'
 		'ToolStripSeparator1
@@ -126,6 +126,7 @@ Partial Class Form1
 		'SplitContainer1
 		'
 		Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+		Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
 		Me.SplitContainer1.Location = New System.Drawing.Point(0, 56)
 		Me.SplitContainer1.Name = "SplitContainer1"
 		'
@@ -209,8 +210,10 @@ Partial Class Form1
 		Me.TextBox1.Location = New System.Drawing.Point(0, 21)
 		Me.TextBox1.Multiline = True
 		Me.TextBox1.Name = "TextBox1"
+		Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both
 		Me.TextBox1.Size = New System.Drawing.Size(258, 347)
 		Me.TextBox1.TabIndex = 1
+		Me.TextBox1.WordWrap = False
 		'
 		'ComboBox2
 		'
@@ -261,7 +264,7 @@ Partial Class Form1
 		Me.Controls.Add(Me.ToolStrip1)
 		Me.KeyPreview = True
 		Me.Name = "Form1"
-		Me.Text = "Form1"
+		Me.Text = "PlotToData"
 		Me.ToolStrip1.ResumeLayout(False)
 		Me.ToolStrip1.PerformLayout()
 		Me.SplitContainer1.Panel1.ResumeLayout(False)

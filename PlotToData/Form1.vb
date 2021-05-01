@@ -325,4 +325,8 @@ Public Class Form1
             PlotC.Save(fso.FileName)
         End If
     End Sub
+
+    Private Sub ToolStripButton1_ButtonClick(sender As Object, e As EventArgs) Handles ToolStripButton1.ButtonClick
+        OpenImage()
+    End Sub
 End Class

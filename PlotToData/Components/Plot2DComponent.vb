@@ -93,7 +93,7 @@
 				Case TypesCode.Matlab
 					salida = MatlabCode()
 				Case TypesCode.Python
-
+					salida = PythonCode()
 			End Select
 			Return salida
 		End Function
@@ -149,52 +149,63 @@
 
 		Private Sub RefreshValues()
 			Corected_Series.Clear()
-			For Each seri In Series
-				Dim ser As New DataSeries
-				ser.NombreX = X_axis.Name
-				ser.NombreY = seri.Serie_Name
-				Corected_Series.Add(ser)
-				Dim xby, xbx, xax, xay As Double 'para proyectar en el eje X
-				Dim yby, ybx, yax, yay As Double 'para proyecar en el eje y
 
-				Dim Xpos As Double
-				Dim Ypos As Double
+			Dim validacion As Boolean
 
-				xbx = X_axis.End_Pont.X - X_axis.Start_Point.X
-				xby = X_axis.End_Pont.Y - X_axis.Start_Point.Y
+			If (X_axis.Start_Value <> X_axis.End_Value) And (Y_axis.Start_Value <> Y_axis.End_Value) Then
+				validacion = True
+			Else
+				validacion = False
+				MsgBox("You must assign the initial and final values to each axis. (X_axis.Start_Value, X_axis.End_Value, Y_axis.Start_Value, Y_axis.End_Value)")
+			End If
 
-				ybx = Y_axis.End_Pont.X - Y_axis.Start_Point.X
-				yby = Y_axis.End_Pont.Y - Y_axis.Start_Point.Y
+			If validacion = True Then
+				For Each seri In Series
+					Dim ser As New DataSeries
+					ser.NombreX = X_axis.Name
+					ser.NombreY = seri.Serie_Name
+					Corected_Series.Add(ser)
+					Dim xby, xbx, xax, xay As Double 'para proyectar en el eje X
+					Dim yby, ybx, yax, yay As Double 'para proyecar en el eje y
 
-				For Each punto In seri.Points
-					'calculo la proyección
-					xax = punto.X - X_axis.Start_Point.X
-					xay = punto.Y - X_axis.Start_Point.Y
+					Dim Xpos As Double
+					Dim Ypos As Double
 
-					yax = punto.X - Y_axis.Start_Point.X
-					yay = punto.Y - Y_axis.Start_Point.Y
+					xbx = X_axis.End_Pont.X - X_axis.Start_Point.X
+					xby = X_axis.End_Pont.Y - X_axis.Start_Point.Y
 
-					Xpos = (xax * xbx + xay * xby) / (Math.Sqrt(xbx ^ 2 + xby ^ 2))
-					Ypos = (yax * ybx + yay * yby) / (Math.Sqrt(ybx ^ 2 + yby ^ 2))
+					ybx = Y_axis.End_Pont.X - Y_axis.Start_Point.X
+					yby = Y_axis.End_Pont.Y - Y_axis.Start_Point.Y
 
-					'calculamos las escalas que deben tener
-					If X_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
-						Xpos = (Xpos * (X_axis.End_Value - X_axis.Start_Value)) / Math.Sqrt(xbx ^ 2 + xby ^ 2) + X_axis.Start_Value
-					Else
-						Xpos = (Xpos * (Math.Log(X_axis.End_Value) - Math.Log(X_axis.Start_Value))) / Math.Sqrt(xbx ^ 2 + xby ^ 2) + Math.Log(X_axis.Start_Value)
-						Xpos = Math.Exp(Xpos)
-					End If
+					For Each punto In seri.Points
+						'calculo la proyección
+						xax = punto.X - X_axis.Start_Point.X
+						xay = punto.Y - X_axis.Start_Point.Y
 
-					If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
-						Ypos = (Ypos * (Y_axis.End_Value - Y_axis.Start_Value)) / Math.Sqrt(ybx ^ 2 + yby ^ 2) + Y_axis.Start_Value
-					Else
-						Ypos = (Ypos * (Math.Log(Y_axis.End_Value) - Math.Log(Y_axis.Start_Value))) / Math.Sqrt(ybx ^ 2 + yby ^ 2) + Math.Log(Y_axis.Start_Value)
-						Ypos = Math.Exp(Ypos)
-					End If
-					ser.AgregarPunto(Xpos, Ypos)
+						yax = punto.X - Y_axis.Start_Point.X
+						yay = punto.Y - Y_axis.Start_Point.Y
+
+						Xpos = (xax * xbx + xay * xby) / (Math.Sqrt(xbx ^ 2 + xby ^ 2))
+						Ypos = (yax * ybx + yay * yby) / (Math.Sqrt(ybx ^ 2 + yby ^ 2))
+
+						'calculamos las escalas que deben tener
+						If X_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+							Xpos = (Xpos * (X_axis.End_Value - X_axis.Start_Value)) / Math.Sqrt(xbx ^ 2 + xby ^ 2) + X_axis.Start_Value
+						Else
+							Xpos = (Xpos * (Math.Log(X_axis.End_Value) - Math.Log(X_axis.Start_Value))) / Math.Sqrt(xbx ^ 2 + xby ^ 2) + Math.Log(X_axis.Start_Value)
+							Xpos = Math.Exp(Xpos)
+						End If
+
+						If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+							Ypos = (Ypos * (Y_axis.End_Value - Y_axis.Start_Value)) / Math.Sqrt(ybx ^ 2 + yby ^ 2) + Y_axis.Start_Value
+						Else
+							Ypos = (Ypos * (Math.Log(Y_axis.End_Value) - Math.Log(Y_axis.Start_Value))) / Math.Sqrt(ybx ^ 2 + yby ^ 2) + Math.Log(Y_axis.Start_Value)
+							Ypos = Math.Exp(Ypos)
+						End If
+						ser.AgregarPunto(Xpos, Ypos)
+					Next
 				Next
-			Next
-
+			End If
 
 
 		End Sub
@@ -238,6 +249,7 @@
 				End If
 			Next
 			sal = sal & "xlabel('" & X_axis.Name & "')" & vbCrLf
+			sal = sal & "ylabel('" & Y_axis.Name & "')" & vbCrLf
 			sal = sal & "title('" & Title & "')" & vbCrLf
 			sal = sal & "grid on" & vbCrLf
 			sal = sal & "grid minor" & vbCrLf
@@ -249,6 +261,83 @@
 			Next
 			sal = Strings.Mid(sal, 1, sal.Length - 1)
 			sal = sal & ") " & vbCrLf
+
+			Return sal
+		End Function
+
+		Private Function PythonCode() As String
+
+			Dim sal As String = "import numpy as np
+import matplotlib.pyplot as plt
+
+fig, ax = plt.figure()
+
+"
+
+			sal = sal & "# Loading series" & vbCrLf
+
+			For Each serie In Corected_Series
+				Dim sname As String = MatlabSeriesName(serie.NombreY)
+				Dim Xco As String = sname & "X = [ "
+				Dim Yco As String = sname & "Y = [ "
+
+				For Each ele In serie.Datos
+					Xco = Xco & ele.X.ToString & ", "
+					Yco = Yco & ele.Y.ToString & ", "
+				Next
+				Xco = Strings.Mid(Xco, 1, Xco.Length - 2) & "] "
+				Yco = Strings.Mid(Yco, 1, Yco.Length - 2) & "] "
+				sal = sal & Xco & vbCrLf & Yco & vbCrLf
+
+			Next
+
+			'sal = sal & vbCrLf
+			'Dim listaNom As String = ""
+			'For Each serie In Corected_Series
+			'	Dim sname As String = MatlabSeriesName(serie.NombreY)
+			'	listaNom = listaNom & sname & "X, " & sname & "Y, "
+			'Next
+			'listaNom = Strings.Mid(listaNom, 1, listaNom.Length - 2)
+
+			'If X_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+			'	If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+			'		sal = sal & "ax.plot( " & listaNom & " )" & vbCrLf
+			'	Else
+			'		sal = sal & "ax.semilogy( " & listaNom & " )" & vbCrLf 'ok
+			'	End If
+			'Else
+			'	If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+			'		sal = sal & "ax.semilogx( " & listaNom & " )" & vbCrLf 'ok
+			'	Else
+			'		sal = sal & "ax.loglog( " & listaNom & " )" & vbCrLf
+			'	End If
+			'End If
+
+			For Each serie In Corected_Series
+
+				Dim sname As String = MatlabSeriesName(serie.NombreY)
+
+				If X_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+					If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+						sal = sal & "ax.plot( " & sname & "X , " & sname & "Y, label= '" & serie.NombreY & "')" & vbCrLf
+					Else
+						sal = sal & "ax.semilogy( " & sname & "X, " & sname & "Y, label= '" & serie.NombreY & "')" & vbCrLf
+					End If
+				Else
+					If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+						sal = sal & "ax.semilogx( " & sname & "X, " & sname & "Y, label= '" & serie.NombreY & "')" & vbCrLf
+					Else
+						sal = sal & "ax.loglog( " & sname & "X, " & sname & "Y, label= '" & serie.NombreY & "')" & vbCrLf
+					End If
+				End If
+			Next
+
+			sal = sal & "ax.set_xlabel('" & X_axis.Name & "')" & vbCrLf
+			sal = sal & "ax.set_ylabel('" & Y_axis.Name & "')" & vbCrLf
+			sal = sal & "ax.set_title('" & Title & "')" & vbCrLf
+			sal = sal & "ax.grid(True)" & vbCrLf
+			sal = sal & "plt.legend()" & vbCrLf
+			sal = sal & "plt.show()" & vbCrLf
 
 			Return sal
 		End Function
