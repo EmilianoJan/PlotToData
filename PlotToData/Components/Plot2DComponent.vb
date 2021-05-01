@@ -27,6 +27,12 @@
 		Python
 	End Enum
 
+	Public Enum SaveFormatOptions
+		mat
+		csv
+		NIST
+	End Enum
+
 	''' <summary>
 	''' Inicialización del componente (requiere disponer de un panel sobre el
 	''' cual se van cargando los puntos)
@@ -62,7 +68,7 @@
 
 	Public Function GenerateCode(Code As TypesCode) As String
 		RefreshValues()
-		Dim salida As String
+		Dim salida As String = ""
 		Select Case Code
 			Case TypesCode.Matlab
 				salida = MatlabCode()
@@ -71,6 +77,51 @@
 		End Select
 		Return salida
 	End Function
+
+	Public Sub Save(Dir As String)
+		RefreshValues()
+		Dim Format As SaveFormatOptions
+		Select Case Strings.LCase(Strings.Right(Dir, 3))
+			Case "mat"
+				Format = SaveFormatOptions.mat
+			Case "csv"
+				Format = SaveFormatOptions.csv
+			Case "mtx"
+				Format = SaveFormatOptions.NIST
+		End Select
+
+		Select Case Format
+			Case SaveFormatOptions.mat
+				Dim ListaMatrices As New Dictionary(Of String, MathNet.Numerics.LinearAlgebra.Matrix(Of Double))
+				For Each seri In Corected_Series
+					Dim tabla(,) As Double
+					seri.ConvertirDatosAMatrizDouble(tabla)
+					Dim B = MathNet.Numerics.LinearAlgebra.Double.Matrix.Build.DenseOfArray(tabla)
+					ListaMatrices.Add(MatlabSeriesName(seri.NombreY), B)
+				Next
+				MathNet.Numerics.Data.Matlab.MatlabWriter.Write(Dir, ListaMatrices)
+			Case SaveFormatOptions.csv
+				'generamos un archivo por serie.
+				Dim dirb As String = Strings.Mid(Dir, 1, Strings.Len(Dir) - 3)
+				For Each seri In Corected_Series
+					Dim tabla(,) As Double
+					seri.ConvertirDatosAMatrizDouble(tabla)
+					Dim B = MathNet.Numerics.LinearAlgebra.Double.Matrix.Build.DenseOfArray(tabla)
+					MathNet.Numerics.Data.Text.DelimitedWriter.Write(dirb & " " & seri.NombreY & ".csv", B, ",")
+				Next
+			Case SaveFormatOptions.NIST
+				'generamos un archivo por serie.
+				Dim dirb As String = Strings.Mid(Dir, 1, Strings.Len(Dir) - 3)
+				For Each seri In Corected_Series
+					Dim tabla(,) As Double
+					seri.ConvertirDatosAMatrizDouble(tabla)
+					Dim B = MathNet.Numerics.LinearAlgebra.Double.Matrix.Build.DenseOfArray(tabla)
+					MathNet.Numerics.Data.Text.MatrixMarketWriter.WriteMatrix(dirb & " " & seri.NombreY & ".mtx", B)
+				Next
+		End Select
+
+
+	End Sub
 
 	Private Sub RefreshValues()
 		Corected_Series.Clear()
@@ -103,12 +154,25 @@
 				Ypos = (yax * ybx + yay * yby) / (Math.Sqrt(ybx ^ 2 + yby ^ 2))
 
 				'calculamos las escalas que deben tener
-				Xpos = (Xpos * (X_axis.End_Value - X_axis.Start_Value)) / Math.Sqrt(xbx ^ 2 + xby ^ 2) + X_axis.Start_Value
-				Ypos = (Ypos * (Y_axis.End_Value - Y_axis.Start_Value)) / Math.Sqrt(ybx ^ 2 + yby ^ 2) + Y_axis.Start_Value
+				If X_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+					Xpos = (Xpos * (X_axis.End_Value - X_axis.Start_Value)) / Math.Sqrt(xbx ^ 2 + xby ^ 2) + X_axis.Start_Value
+				Else
+					Xpos = (Xpos * (Math.Log(X_axis.End_Value) - Math.Log(X_axis.Start_Value))) / Math.Sqrt(xbx ^ 2 + xby ^ 2) + Math.Log(X_axis.Start_Value)
+					Xpos = Math.Exp(Xpos)
+				End If
 
+				If Y_axis.Scale = ComponentAxis.TypesOfScales.Lineal Then
+					Ypos = (Ypos * (Y_axis.End_Value - Y_axis.Start_Value)) / Math.Sqrt(ybx ^ 2 + yby ^ 2) + Y_axis.Start_Value
+				Else
+					Ypos = (Ypos * (Math.Log(Y_axis.End_Value) - Math.Log(Y_axis.Start_Value))) / Math.Sqrt(ybx ^ 2 + yby ^ 2) + Math.Log(Y_axis.Start_Value)
+					Ypos = Math.Exp(Ypos)
+				End If
 				ser.AgregarPunto(Xpos, Ypos)
 			Next
 		Next
+
+
+
 	End Sub
 
 

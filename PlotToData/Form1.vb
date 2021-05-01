@@ -24,6 +24,23 @@
         PlotC = New Plot2DComponent(DrawCo)
         ' original = New Bitmap(Panel1.BackgroundImage)
         ActualizarListado()
+        CargarInicial()
+    End Sub
+
+    Private Sub CargarInicial()
+        With PlotC.X_axis
+            .End_Pont.X = 394
+            .End_Pont.Y = 313
+            .Start_Point.X = 108
+            .Start_Point.Y = 313
+        End With
+
+        With PlotC.Y_axis
+            .End_Pont.X = 108
+            .End_Pont.Y = 25.9
+            .Start_Point.X = 108
+            .Start_Point.Y = 313
+        End With
     End Sub
 
     Private Sub Form1_MouseWheel(sender As Object, e As MouseEventArgs) Handles Me.MouseWheel
@@ -144,8 +161,6 @@
 
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
-
-        OpenImage()
     End Sub
 
 
@@ -159,7 +174,7 @@
 
         If ofd.ShowDialog() = DialogResult.OK Then
             original = New Bitmap(ofd.FileName)
-            Panel1.BackgroundImage = original
+            PictureBox1.Image = original
             VerificarPictureBox()
         End If
 
@@ -279,5 +294,24 @@
         ActualizarListado()
 
 
+    End Sub
+
+    Private Sub FromClipboardToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FromClipboardToolStripMenuItem.Click
+        If Clipboard.ContainsImage() = True Then
+            PictureBox1.Image = Clipboard.GetImage
+            VerificarPictureBox()
+        End If
+    End Sub
+
+    Private Sub FromFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FromFileToolStripMenuItem.Click
+        OpenImage()
+    End Sub
+
+    Private Sub ToolStripButton5_Click(sender As Object, e As EventArgs) Handles ToolStripButton5.Click
+        Dim fso As New SaveFileDialog
+        fso.Filter = "Level-5 MATLAB Mat (*.mat)|*.mat|Delimited Text Files (*.CSV)|*.csv| NIST MatrixMarket Text Files (*.mtx)|*.mtx"
+        If fso.ShowDialog() = DialogResult.OK Then
+            PlotC.Save(fso.FileName)
+        End If
     End Sub
 End Class
