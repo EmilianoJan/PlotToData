@@ -21,6 +21,7 @@ First you must load or open the image from which you want to extract the points.
 
 
 The next step is to configure the axes. To do this, click on the blue square. In light blue the end point of the axis is represented, while in dark blue the starting point. The points do not necessarily have to be located at the origin of the graph. Example following figure, however it is convenient that they cover as much of the graph as possible so that the error is as small as possible.
+
 ![imagen](https://user-images.githubusercontent.com/19601324/116791301-b2199b80-aa8f-11eb-8caa-07405d004388.png)
 
 After establishing the positions of the axes, you must configure the initial and final values, the name of the axis and whether it is linear or logarithmic.
@@ -28,6 +29,7 @@ After establishing the positions of the axes, you must configure the initial and
 ![imagen](https://user-images.githubusercontent.com/19601324/116791329-dd9c8600-aa8f-11eb-80b4-a4e66849563c.png)
 
 Once completed, you can start adding data series by clicking "Add series". By clicking on the image, the points of that series will be added. Once all the points have been loaded, you must right click or ESC to exit the "adding points" mode.
+
 ![imagen](https://user-images.githubusercontent.com/19601324/116791380-3cfa9600-aa90-11eb-8084-93fbe052652f.png)
 
 
@@ -43,7 +45,9 @@ To modify the properties of each of the parts, the displayed list can be used.
 ![imagen](https://user-images.githubusercontent.com/19601324/116791441-be522880-aa90-11eb-9716-d002aeab1579.png)
 
 ## Octave figure example 
+
 ![imagen](https://user-images.githubusercontent.com/19601324/116791974-51409200-aa94-11eb-9e91-15bfcacd39ff.png)
+
 **code**
 ```matlab
 % Loading series
