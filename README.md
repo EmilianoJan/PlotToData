@@ -93,4 +93,12 @@ plt.show()
 
 [Download PlotToData.exe](https://github.com/EmilianoJan/PlotToData/releases/)
 
-
+## Run PlotToData inside Docker
+1. Build the image
+```
+docker build -t plot-to-data .
+```
+2. Start the container
+```
+docker run -v /tmp:/tmp -v $PWD:/mnt plot-to-data:latest $DISPLAY $USER
+```
